@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:17:59 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/12 18:07:22 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/10/17 13:22:15 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,12 @@ typedef struct		s_mall
 {
 	void			*ptr;
 	char			type;
+	size_t			len;
 	char			use;
 	struct s_mall	*next;
 }					t_mall;
 
-t_mall				*mall;
+size_t				page_tot;
 void				*stack;
 
 void				*malloc(size_t size);
@@ -39,6 +40,7 @@ void				*tiny();
 void				*small();
 int					init_mem(size_t malloc_size[2], size_t page_size);
 int					init_stack(size_t len);
-void				*allocate(size_t size);
+void				*new_page(size_t page_size);
+void				*allocate(size_t size, size_t malloc_size[2]);
 
 #endif

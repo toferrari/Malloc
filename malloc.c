@@ -6,13 +6,13 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:15:56 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/12 18:30:17 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/10/17 11:39:38 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern t_mall	*mall;
+extern size_t	page_tot;
 extern void		*stack;
 
 void		get_size(size_t page_s, size_t size, size_t (*malloc_size)[2])
@@ -54,41 +54,51 @@ void		*malloc(size_t size)
 	size_t	page_size;
 	size_t	malloc_size[2];
 
-	if (!stack || !check_space(size))
+	if (!stack)
 	{
 		page_size = getpagesize();
 		get_size(page_size, size, &malloc_size);
+		printf("%d\n", page_size);
 		if (!init_stack(page_size) || !init_mem(malloc_size, page_size))
 			return (NULL);
 	}
-	return (allocate(size));
+	return (allocate(size, malloc_size));
 }
 
 int		main()
 {
 	char *str;
 	char *str2;
-	char *str22;
 	char *str3;
 	char *str4;
 	char *str5;
 
 	// str2 =
-	str = (char*)malloc(2);
+	printf("sizeof = %lu\n",sizeof(t_mall));
+	printf("sizeof = %d\n", 4096 / 24);
+	printf("sizeof = %lu\n",sizeof(t_mall) * 1740);
+	str = (char*)malloc(200);
 	t_mall *tmp = (t_mall *)stack;
-	// while (tmp)
-	// {
-	// 	printf("%c -> %p\n", tmp->type, tmp->ptr);
-	// 	tmp = tmp->next;
-	// }
-	str2 = (char*)malloc(2);
-	str22 = (char*)malloc(2);
-	str3 = (char*)malloc(200);
-	str4 = (char*)malloc(220);
-	str5 = (char*)malloc(200);
-	printf("%p -> %p -> %p -> %p -> %p -> %p\n", str, str2, str22,str3, str4, str5);
-	free((void*)str22);
-	printf("%p", str228);
+	int i = 0;
+	while (tmp->next)
+	{
+		tmp = tmp->next;
+		i++;
+	}
+	str2 = (char*)malloc(200);
+	// printf("%c -> %p\n", tmp->type, tmp->ptr);
+	// tmp = tmp->next;
+	// printf("%c -> %p\n", tmp->type, tmp->ptr);
+	// tmp = tmp->next;
+	// printf("%c -> %p\n", tmp->type, tmp->ptr);
+	// str2 = (char*)malloc(2);
+	// str22 = (char*)malloc(2);
+	// str3 = (char*)malloc(200);
+	// str4 = (char*)malloc(220);
+	// str5 = (char*)malloc(200);
+	// printf("%p -> %p -> %p -> %p -> %p -> %p\n", str, str2, str22,str3, str4, str5);
+	// free((void*)str22);
+	// printf("%p", str228);
 	// str22[0] = 'f';
 	return 0;
 }
