@@ -6,14 +6,13 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:52:57 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/17 14:04:54 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/10/19 16:12:39 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-// extern t_mall	*mall;
-extern void	*stack;
+extern void	*stack[3];
 
 int			init_tiny(size_t len)
 {
@@ -22,57 +21,48 @@ int			init_tiny(size_t len)
 
 	if (!(tmp = mmap(0, len, PROT_READ | PROT_WRITE,
 			MAP_ANON | MAP_PRIVATE, -1, 0)))
-	return (0);
-	tmp_mall = (t_mall*)stack;
+		return (0);
+	tmp_mall = (t_mall*)(stack[0]);
 	tmp_mall->ptr = tmp;
-	tmp_mall->type = 't';
 	tmp_mall->use = 'n';
 	tmp_mall->next = NULL;
 	return (1);
 }
 
-int				init_small(size_t malloc_size[2])
+int				init_small(size_t malloc_size)
 {
 	void	*tmp;
 	t_mall	*tmp_mall;
+	t_mall	*new_mall;
 
-	if (!(tmp = mmap(0, malloc_size[1], PROT_READ | PROT_WRITE,
+	if (!(tmp = mmap(0, malloc_size, PROT_READ | PROT_WRITE,
 			MAP_ANON | MAP_PRIVATE, -1, 0)))
 		return (0);
-	tmp_mall = (t_mall*)(stack + (sizeof(t_mall) * TINY));
-	tmp_mall->ptr = tmp;
-	tmp_mall->type = 's';
-	tmp_mall->use = 'n';
-	// tmp_mall->len = 0;
-	tmp_mall->next = NULL;
+	new_mall = (t_mall*)(stack[1]);
+	new_mall->ptr = tmp;
+	new_mall->use = 'n';
+	new_mall->len = 0;
+	new_mall->next = NULL;
 	return (1);
 }
 
-void			space(int loop, char type, size_t len, size_t page_size)
+void			space(int *loop, char type, size_t len, size_t page_size)
 {
 	t_mall	*tmp_mall;
 	t_mall	*new_mall;
+	void	*tmp;
 
-	tmp_mall = (t_mall*)stack;
-	if (type == 't')
-		while (tmp_mall->next)
-			tmp_mall = tmp_mall->next;
-	new_mall = tmp_mall->next;
-	new_mall = (t_mall*)(stack + sizeof(tmp_mall));
-	// while (new_mall)
-	// 	new_mall = new_mall->next;
-	printf("adr = %p\n", tmp_mall);
+	// printf("type = %d\n", type);
+	tmp_mall = (t_mall*)(stack[type]);
+	while (tmp_mall->next)
+		tmp_mall = tmp_mall->next;
+	new_mall = tmp_mall + 1;
 	new_mall->ptr = tmp_mall->ptr + len;
-	new_mall->type = type;
 	new_mall->use = 'n';
 	new_mall->len = len;
 	tmp_mall->next = new_mall;
-	// new_mall->len = 0;
-	// new_page(page_size)	;
-	if (((loop + 1) * sizeof(t_mall)) > page_tot)
-		new_mall->next = new_page(page_size);
-	else
-		new_mall->next = NULL;
+	new_mall->next = NULL;
+	// printf("adr t_mall = %p, adr ptr = %p, loop = %d, type = %d\n", new_mall, tmp_mall->ptr, *loop, type);
 }
 
 int				init_mem(size_t malloc_size[2], size_t page_size)
@@ -83,11 +73,22 @@ int				init_mem(size_t malloc_size[2], size_t page_size)
 
 	tiny = malloc_size[0] / TINY;
 	small = malloc_size[1] / SMALL;
-	loop = 0;
-	if (!init_tiny(malloc_size[0]))
-		return (0);
-	while (++loop < (malloc_size[0] / TINY))
-		space(loop, 't', TINY, page_size);
-
+	loop = -1;
+	while (++loop < (malloc_size[0] / TINY + malloc_size[1] / SMALL) - 1)
+	{
+		if (loop == 0)
+		{
+			if (!init_tiny(malloc_size[0]))
+				return (0);
+		}
+		else if (loop == TINY)
+		{
+			if (!init_small(malloc_size[1]))
+				return (0);
+		}
+		else
+			space(&loop, (loop < malloc_size[0] / TINY) ? 0 : 1,
+		 		(loop < malloc_size[0] / TINY) ? TINY : SMALL, page_size);
+	}
 	return (1);
 }

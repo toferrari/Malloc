@@ -6,14 +6,14 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:15:56 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/17 11:39:38 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/10/19 16:17:39 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern size_t	page_tot;
-extern void		*stack;
+extern size_t	page_tot[3];
+extern void		*stack[3];
 
 void		get_size(size_t page_s, size_t size, size_t (*malloc_size)[2])
 {
@@ -24,6 +24,7 @@ void		get_size(size_t page_s, size_t size, size_t (*malloc_size)[2])
 	nb_alloc = 100;
 	(*malloc_size)[0] = TINY * nb_alloc;
 	(*malloc_size)[1] = SMALL * nb_alloc;
+	page_tot[2] = page_s;
 	i = -1;
 	j = 0;
 	while (++i < 3)
@@ -32,37 +33,37 @@ void		get_size(size_t page_s, size_t size, size_t (*malloc_size)[2])
 			j++;
 }
 
-int			check_space(size_t size)
-{
-	t_mall	*tmp;
-
-	tmp = (t_mall*)stack;
-	if (size <= TINY)
-		tmp = (t_mall *)stack;
-	else if (size <= SMALL)
-		tmp = (t_mall *)stack + (sizeof(t_mall) * TINY);
-	while (tmp && tmp->use != 'n')
-		tmp = tmp->next;
-	if (!tmp)
-		return (0);
-	else
-		return (1);
-}
+// int			check_space(size_t size)
+// {
+// 	t_mall	*tmp;
+//
+// 	tmp = (t_mall*)stack;
+// 	if (size <= TINY)
+// 		tmp = (t_mall *)stack;
+// 	else if (size <= SMALL)
+// 		tmp = (t_mall *)stack + (sizeof(t_mall) * TINY);
+// 	while (tmp && tmp->use != 'n')
+// 		tmp = tmp->next;
+// 	if (!tmp)
+// 		return (0);
+// 	else
+// 		return (1);
+// }
 
 void		*malloc(size_t size)
 {
 	size_t	page_size;
 	size_t	malloc_size[2];
 
-	if (!stack)
+	if (!(*stack))
 	{
+
 		page_size = getpagesize();
 		get_size(page_size, size, &malloc_size);
-		printf("%d\n", page_size);
-		if (!init_stack(page_size) || !init_mem(malloc_size, page_size))
+		if (!init_stack(page_size, malloc_size) || !init_mem(malloc_size, page_size))
 			return (NULL);
 	}
-	return (allocate(size, malloc_size));
+	return (allocate(size));
 }
 
 int		main()
@@ -74,18 +75,22 @@ int		main()
 	char *str5;
 
 	// str2 =
-	printf("sizeof = %lu\n",sizeof(t_mall));
 	printf("sizeof = %d\n", 4096 / 24);
-	printf("sizeof = %lu\n",sizeof(t_mall) * 1740);
-	str = (char*)malloc(200);
-	t_mall *tmp = (t_mall *)stack;
+	printf("sizeof = %lu\n",sizeof(t_mall));
+	str = (char*)malloc(20);
+	t_mall *tmp = (t_mall *)(stack[0]);
 	int i = 0;
-	while (tmp->next)
+	str2 = (char*)malloc(100);
+	// str3 = (char*)malloc(2000);
+	// str4 = (char*)malloc(2000);
+	while (tmp)
 	{
-		tmp = tmp->next;
+		if (tmp->use == 'y')
+		printf("adr mall = %p, adr ptr = %p, loop = %d\n", tmp, tmp->ptr,i);
 		i++;
+		tmp = tmp->next;
 	}
-	str2 = (char*)malloc(200);
+	// printf("page_tot%d\n\n", page_tot);
 	// printf("%c -> %p\n", tmp->type, tmp->ptr);
 	// tmp = tmp->next;
 	// printf("%c -> %p\n", tmp->type, tmp->ptr);

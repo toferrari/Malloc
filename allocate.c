@@ -6,55 +6,52 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 16:03:32 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/16 15:58:19 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/10/19 17:32:36 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern void	*stack;
+extern void	*stack[3];
 
-void		*large(size_t size, size_t malloc_size[2])
+void		*large(size_t size)
 {
 	t_mall	*large;
 	t_mall	*tmp_mall;
 	size_t	s_large;
 	int		i;
 
-	s_large = (malloc_size[0] / TINY) + (malloc_size[1] / SMALL);
-	i = 0;
-	tmp_mall = (t_mall*)stack + (sizeof(t_mall) * (s_large - 1));
-	printf("passe\n");
-	if (tmp_mall->next)
-		while ((tmp_mall = tmp_mall->next) || (tmp_mall->use == 'n' ))
-			i++;
-	large = (t_mall*)stack + (sizeof(t_mall) * (s_large + i));
+	tmp_mall = (t_mall *)(stack[2]);
+	while (tmp_mall->next)
+		tmp_mall = tmp_mall->next;
+
+	large = tmp_mall + 1;
 	if (!(large->ptr = mmap(0, size, PROT_READ | PROT_WRITE,
 			MAP_ANON | MAP_PRIVATE, -1, 0)))
 		return (NULL);
-	large->type = 'l';
-	large->use = 'n';
-	// large->len = size;
+	large->use = 'y';
+	large->len = size;
 	tmp_mall->next = large;
 	large->next = NULL;
 	return (large->ptr);
 
 }
 
-void		*allocate(size_t size, size_t malloc_size[2])
+void		*allocate(size_t size)
 {
 	t_mall *tmp;
 	void	*ptr;
 
+	tmp = (t_mall *)stack[TAB(size)];
 	if (size <= TINY)
-		tmp = (t_mall *)stack;
+		while (tmp && tmp->use != 'n')
+			tmp = tmp->next;
 	else if (size <= SMALL)
-		tmp = (t_mall *)stack + (sizeof(t_mall) * TINY);
+		while (tmp && (tmp->use != 'n'))
+			tmp = tmp->next;
 	else
-		return (large(size, malloc_size));
-	while (tmp && tmp->use != 'n')
-		tmp = tmp->next;
+		return (large(size));
 	tmp->use = 'y';
-	// tmp->len = size;
+	tmp->len = size;
 	return (tmp->ptr);
 }
