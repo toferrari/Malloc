@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:15:56 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/19 16:17:39 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/10/31 19:06:26 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,6 @@ void		get_size(size_t page_s, size_t size, size_t (*malloc_size)[2])
 				(nb_alloc + j + 1))) % page_s != 0)
 			j++;
 }
-
-// int			check_space(size_t size)
-// {
-// 	t_mall	*tmp;
-//
-// 	tmp = (t_mall*)stack;
-// 	if (size <= TINY)
-// 		tmp = (t_mall *)stack;
-// 	else if (size <= SMALL)
-// 		tmp = (t_mall *)stack + (sizeof(t_mall) * TINY);
-// 	while (tmp && tmp->use != 'n')
-// 		tmp = tmp->next;
-// 	if (!tmp)
-// 		return (0);
-// 	else
-// 		return (1);
-// }
 
 void		*malloc(size_t size)
 {
@@ -77,19 +60,40 @@ int		main()
 	// str2 =
 	printf("sizeof = %d\n", 4096 / 24);
 	printf("sizeof = %lu\n",sizeof(t_mall));
-	str = (char*)malloc(20);
-	t_mall *tmp = (t_mall *)(stack[0]);
-	int i = 0;
-	str2 = (char*)malloc(100);
-	// str3 = (char*)malloc(2000);
+	// str = (char*)malloc(2000);
+	str2 = (char*)malloc(50);
+	// str = (char*)malloc(10000);
+	t_mall *tmp;
+	t_mall *tmp1;
+	tmp1 = (t_mall *)(stack[0]);
+	t_mall *tmp2;
+	tmp2 = (t_mall *)(stack[1]);
+	int i = -1;
+	printf("tmp 1 = %p\ntmp 2 = %p\n", tmp1, tmp2);
+	// printf("adr str2 = %p\n", str2);
+	// printf("adr str3 = %p\n", str3);
+	// printf("adr 1er tiny = %p\n", stack[0]);
+	// printf("realloc str2 = %p\n", str2);
+	str3 = (char*)malloc(200);
+	str3 = (char*)malloc(2000);
 	// str4 = (char*)malloc(2000);
-	while (tmp)
+	while (++i < 3)
 	{
-		if (tmp->use == 'y')
-		printf("adr mall = %p, adr ptr = %p, loop = %d\n", tmp, tmp->ptr,i);
-		i++;
-		tmp = tmp->next;
+		int j = 0;
+		tmp = (t_mall *)(stack[i]);
+		while (tmp)
+		{
+			if (tmp->use == 'y')
+			// if (j == 127)
+				// printf("apres le 128eme elem -> %p\n", tmp->next);
+				printf("adr mall = %p, adr ptr = %p len = %zu, use = %c \
+count = %d\n", tmp, tmp->ptr, tmp->len, tmp->use, j);
+			tmp = tmp->next;
+			j++;
+		}
+		printf("i = %i\n", j);
 	}
+	printf("adr 1er small = %p\n", stack[1]);
 	// printf("page_tot%d\n\n", page_tot);
 	// printf("%c -> %p\n", tmp->type, tmp->ptr);
 	// tmp = tmp->next;
