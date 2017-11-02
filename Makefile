@@ -6,7 +6,7 @@
 #    By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/13 16:44:11 by tferrari          #+#    #+#              #
-#    Updated: 2017/10/26 18:01:40 by tferrari         ###   ########.fr        #
+#    Updated: 2017/11/02 15:13:20 by tferrari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ NAME = malloc
 SRC_DIR = src
 
 SRC_FILE =	allocate.c found_it.c free.c init_mem.c init_stack.c malloc.c \
-			realloc.c show.c
+			realloc.c show.c check.c new_page.c
 
 SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILE))
 

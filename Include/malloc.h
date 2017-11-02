@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:17:59 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/31 16:25:27 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/02 18:54:20 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,8 @@ int					init_stack(size_t len, size_t malloc_size[2]);
 // void				*new_page(size_t page_size);
 t_mall				*found_it(void *ptr);
 void				*allocate(size_t size);
+int					check_place(size_t size);
+int					new_page(size_t size, size_t malloc_size[2], size_t page_size);
+void				space(char type, size_t len);
 
 #endif

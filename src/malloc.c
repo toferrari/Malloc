@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:15:56 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/31 19:06:26 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/02 19:05:17 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ void		get_size(size_t page_s, size_t size, size_t (*malloc_size)[2])
 	nb_alloc = 100;
 	(*malloc_size)[0] = TINY * nb_alloc;
 	(*malloc_size)[1] = SMALL * nb_alloc;
-	page_tot[2] = page_s;
 	i = -1;
 	j = 0;
 	while (++i < 3)
@@ -38,14 +37,15 @@ void		*malloc(size_t size)
 	size_t	page_size;
 	size_t	malloc_size[2];
 
+	page_size = getpagesize();
+	get_size(page_size, size, &malloc_size);
 	if (!(*stack))
 	{
-
-		page_size = getpagesize();
-		get_size(page_size, size, &malloc_size);
 		if (!init_stack(page_size, malloc_size) || !init_mem(malloc_size, page_size))
 			return (NULL);
 	}
+	else if (!check_place(size) && !new_page(size, malloc_size, page_size))
+		return (NULL);
 	return (allocate(size));
 }
 
@@ -69,13 +69,20 @@ int		main()
 	t_mall *tmp2;
 	tmp2 = (t_mall *)(stack[1]);
 	int i = -1;
-	printf("tmp 1 = %p\ntmp 2 = %p\n", tmp1, tmp2);
+	// printf("tmp 1 = %p\ntmp 2 = %p\n", tmp1, tmp2);
 	// printf("adr str2 = %p\n", str2);
 	// printf("adr str3 = %p\n", str3);
 	// printf("adr 1er tiny = %p\n", stack[0]);
 	// printf("realloc str2 = %p\n", str2);
+	// str3 = (char*)malloc(200);
 	str3 = (char*)malloc(200);
-	str3 = (char*)malloc(2000);
+	str3 = (char*)realloc(str3, 2000);
+	// str3 = (char*)realloc(str3, 200);
+	// str2 = (char*)realloc(str2, 200);
+	// str = (char*)malloc(2000);
+	// printf("%p,\n", str);
+	// str4 = (char*)malloc(3000);
+	// printf("%p,\n", str4);
 	// str4 = (char*)malloc(2000);
 	while (++i < 3)
 	{
@@ -87,13 +94,17 @@ int		main()
 			// if (j == 127)
 				// printf("apres le 128eme elem -> %p\n", tmp->next);
 				printf("adr mall = %p, adr ptr = %p len = %zu, use = %c \
-count = %d\n", tmp, tmp->ptr, tmp->len, tmp->use, j);
+// count = %d\n", tmp, tmp->ptr, tmp->len, tmp->use, j);
 			tmp = tmp->next;
 			j++;
 		}
-		printf("i = %i\n", j);
 	}
-	printf("adr 1er small = %p\n", stack[1]);
+	i = 0;
+	// while (++i < 150)
+	// {
+	// 	str = (char*)malloc(5000);
+	// 	printf(", i = %d\n", i);
+	// }
 	// printf("page_tot%d\n\n", page_tot);
 	// printf("%c -> %p\n", tmp->type, tmp->ptr);
 	// tmp = tmp->next;

@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:52:57 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/31 19:05:44 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/02 17:12:41 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern void	*stack[3];
 
-int			init_tiny(size_t len)
+int			init_both(size_t len, char type)
 {
 	t_mall	*tmp_mall;
 	void	*tmp;
@@ -22,7 +22,7 @@ int			init_tiny(size_t len)
 	if (!(tmp = mmap(0, len, PROT_READ | PROT_WRITE,
 			MAP_ANON | MAP_PRIVATE, -1, 0)))
 		return (0);
-	tmp_mall = (t_mall*)(stack[0]);
+	tmp_mall = (t_mall*)(stack[type]);
 	tmp_mall->ptr = tmp;
 	tmp_mall->use = 'n';
 	tmp_mall->len = 0;
@@ -30,24 +30,18 @@ int			init_tiny(size_t len)
 	return (1);
 }
 
-int				init_small(size_t malloc_size)
+void		init_large()
 {
-	void	*tmp;
-	t_mall	*tmp_mall;
-	t_mall	*new_mall;
+	t_mall	*large;
 
-	if (!(tmp = mmap(0, malloc_size, PROT_READ | PROT_WRITE,
-			MAP_ANON | MAP_PRIVATE, -1, 0)))
-		return (0);
-	new_mall = (t_mall*)(stack[1]);
-	new_mall->ptr = tmp;
-	new_mall->use = 'n';
-	new_mall->len = 0;
-	new_mall->next = NULL;
-	return (1);
+	large = (t_mall *)(stack[2]);
+	large->ptr = NULL;
+	large->use = 'n';
+	large->len = 0;
+	large->next = NULL;
 }
 
-void			space(int *loop, char type, size_t len, size_t page_size)
+void			space(char type, size_t len)
 {
 	t_mall	*tmp_mall;
 	t_mall	*new_mall;
@@ -60,7 +54,7 @@ void			space(int *loop, char type, size_t len, size_t page_size)
 	new_mall = tmp_mall + 1;
 	new_mall->ptr = tmp_mall->ptr + len;
 	new_mall->use = 'n';
-	new_mall->len = len;
+	new_mall->len = 0;
 	tmp_mall->next = new_mall;
 	new_mall->next = NULL;
 	// printf("loop = %d, tmp = %p\n", *loop, new_mall->next);
@@ -76,15 +70,16 @@ int				init_mem(size_t malloc_size[2], size_t page_size)
 	tiny = malloc_size[0] / TINY;
 	small = malloc_size[1] / SMALL;
 	loop = -1;
-	while (++loop < (malloc_size[0] / TINY + malloc_size[1] / SMALL))
+	while (++loop < (tiny + small))
 	{
-		if (loop == 0 && !init_tiny(malloc_size[0]))
-				return (0);
-		else if (loop == TINY && !init_small(malloc_size[1]))
+		if ((loop == 0 || loop == TINY) &&
+			!init_both((loop < tiny) ? malloc_size[0] : malloc_size[1],
+			(loop < tiny) ? 0 : 1))
 				return (0);
 		else if (loop != 0 && loop != TINY)
-			space(&loop, (loop < malloc_size[0] / TINY) ? 0 : 1,
-		 		(loop < malloc_size[0] / TINY) ? TINY : SMALL, page_size);
+			space((loop < malloc_size[0] / TINY) ? 0 : 1,
+		 		(loop < tiny) ? TINY : SMALL);
 	}
+	init_large();
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/10 12:06:19 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/31 18:59:54 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/02 17:28:39 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int				init_stack(size_t page_size, size_t malloc_size[2])
 			return (0);
 		page_tot[i] += size[i] * page_size;
 	}
-	if (!(stack[2] = mmap(0, size[i], PROT_READ | PROT_WRITE,
+	if (!(stack[2] = mmap(0, page_size, PROT_READ | PROT_WRITE,
 		MAP_ANON | MAP_PRIVATE, -1, 0)))
 		return (0);
 	page_tot[2] += page_size;

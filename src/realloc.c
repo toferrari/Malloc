@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 14:41:36 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/30 14:53:33 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/02 19:15:08 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	*new_mall(t_mall *tmp_mall, size_t size)
 		while (new_mall && new_mall->use != 'n')
 			new_mall = new_mall->next;
 	else
-		allocate(size);
+		malloc(size);
 	new_mall->len = size;
 	new_mall->use = 'y';
 	tmp_mall->len = 0;
@@ -46,7 +46,7 @@ void	*realloc(void *ptr, size_t size)
 	t_mall			*tmp_mall;
 
 	if (!ptr)
-		return (allocate(size));
+		return (malloc(size));
 	tmp_mall = found_it(ptr);
 	if (!tmp_mall)
 		return (NULL);
@@ -55,7 +55,9 @@ void	*realloc(void *ptr, size_t size)
 	(tmp_mall->len > SMALL && tmp_mall->len <= size) ||
 	(tmp_mall->len >= size && tmp_mall->len > SMALL))
 		return (same_zone(tmp_mall, size));
-	if (tmp_mall->len <= TINY && size > TINY && size <= SMALL)
+	if ((tmp_mall->len <= TINY && size > TINY && size <= SMALL) ||
+	(size > SMALL && tmp_mall->len <= SMALL))
 		return (new_mall(tmp_mall, size));
+		// printf("salut\n");
 	return (NULL);
 }
