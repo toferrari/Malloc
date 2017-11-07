@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 15:01:56 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/02 19:00:54 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/06 16:32:01 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_mall	*found_it(void *ptr)
 
 	i = -1;
 	if (!ptr)
-	return (NULL);
+		return (NULL);
 	while (++i < 3)
 	{
 		tmp_mall = (t_mall*)(stack[i]);

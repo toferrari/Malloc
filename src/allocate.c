@@ -6,13 +6,13 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/12 16:03:32 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/02 18:50:27 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/06 18:12:12 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern void	*stack[3];
+extern void	*g_stack[3];
 
 void		*large(size_t size)
 {
@@ -32,17 +32,15 @@ void		*large(size_t size)
 	large->use = 'y';
 	large->len = size;
 	tmp_mall->next = large;
-	printf("tmp = %p, large = %p", tmp_mall, large);
 	large->next = NULL;
 	return (large->ptr);
-
 }
 
 void		*allocate(size_t size)
 {
 	t_mall	*tmp;
 	void	*ptr;
-	
+
 	tmp = (t_mall *)stack[TAB(size)];
 	if (size <= SMALL)
 		while (tmp && (tmp->use != 'n'))

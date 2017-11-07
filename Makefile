@@ -6,7 +6,7 @@
 #    By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/13 16:44:11 by tferrari          #+#    #+#              #
-#    Updated: 2017/11/02 15:13:20 by tferrari         ###   ########.fr        #
+#    Updated: 2017/11/07 10:01:57 by tferrari         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ all : libft $(NAME)
 
 $(NAME): $(OBJS)
 	@gcc $(LFT) -o $(NAME) $(OBJS)
-	@echo "\033[32mexecutable lem_in créé\033[0m"
+	@echo "\033[32mexecutable malloc créé\033[0m"
 
 libft:
 	make -C Libft/

@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:17:59 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/02 18:54:20 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/07 10:13:49 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include "libft.h"
+# include "ft_printf.h"
 # include <sys/mman.h>
 
 # define TINY	128
@@ -31,8 +32,8 @@ typedef struct		s_mall
 	struct s_mall	*next;
 }					t_mall;
 
-size_t				page_tot[3];
-void				*stack[3];
+size_t				g_page_tot[3];
+void				*g_stack[3];
 
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
@@ -42,11 +43,11 @@ void				*tiny();
 void				*small();
 int					init_mem(size_t malloc_size[2], size_t page_size);
 int					init_stack(size_t len, size_t malloc_size[2]);
-// void				*new_page(size_t page_size);
 t_mall				*found_it(void *ptr);
 void				*allocate(size_t size);
 int					check_place(size_t size);
-int					new_page(size_t size, size_t malloc_size[2], size_t page_size);
+int					new_page(size_t size, size_t malloc_size[2],
+					size_t page_size);
 void				space(char type, size_t len);
 
 #endif

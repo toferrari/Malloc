@@ -6,13 +6,13 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 14:59:26 by tferrari          #+#    #+#             */
-/*   Updated: 2017/10/30 14:20:36 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/06 18:12:32 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern void	*stack[3];
+extern void	*g_stack[3];
 
 void	free(void *ptr)
 {

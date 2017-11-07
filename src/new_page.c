@@ -6,15 +6,15 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/02 13:53:59 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/02 17:26:18 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/07 09:40:08 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern void	*stack[3];
+extern void	*g_stack[3];
 
-int 		first_mall(int type, size_t malloc_size)
+int			first_mall(int type, size_t malloc_size)
 {
 	t_mall	*tmp;
 	t_mall	*new;
@@ -26,7 +26,7 @@ int 		first_mall(int type, size_t malloc_size)
 	while (tmp->next)
 		tmp = tmp->next;
 	len = (sizeof(t_mall) * malloc_size / (type == 0 ? TINY : SMALL));
-	if (!(n_stack = mmap(0, len , PROT_READ | PROT_WRITE,
+	if (!(n_stack = mmap(0, len, PROT_READ | PROT_WRITE,
 		MAP_ANON | MAP_PRIVATE, -1, 0)))
 		return (0);
 	tmp->next = n_stack;
@@ -50,7 +50,7 @@ int			new_large(size_t page_size)
 	new = (t_mall*)stack[2];
 	while (tmp->next)
 		tmp = tmp->next;
-	if (!(n_stack = mmap(0, page_size , PROT_READ | PROT_WRITE,
+	if (!(n_stack = mmap(0, page_size, PROT_READ | PROT_WRITE,
 		MAP_ANON | MAP_PRIVATE, -1, 0)))
 		return (0);
 	tmp->next = n_stack;
@@ -59,7 +59,6 @@ int			new_large(size_t page_size)
 	new->use = 'n';
 	new->len = 0;
 	new->next = NULL;
-	printf("tmp = %p, tmp->next = %p, new = %p\n", tmp, tmp->next, new);
 	page_tot[2] += page_size;
 	return (1);
 }

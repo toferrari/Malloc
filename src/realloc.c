@@ -6,14 +6,14 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 14:41:36 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/02 19:15:08 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/06 18:12:02 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern void		*stack[3];
-extern size_t	page_tot[3];
+extern size_t	g_page_tot[3];
+extern void		*g_stack[3];
 
 void	*same_zone(t_mall *tmp_mall, size_t size)
 {
@@ -24,21 +24,18 @@ void	*same_zone(t_mall *tmp_mall, size_t size)
 void	*new_mall(t_mall *tmp_mall, size_t size)
 {
 	size_t	i;
-	t_mall	*new_mall;
+	t_mall	*new;
+	void	*tmp;
 
-	i = (tmp_mall->len <= SMALL) ? 1 : 2;
-	new_mall = (t_mall*)(stack[i]);
-	if (i == 1)
-		while (new_mall && new_mall->use != 'n')
-			new_mall = new_mall->next;
-	else
-		malloc(size);
-	new_mall->len = size;
-	new_mall->use = 'y';
+	i = (size <= SMALL) ? 1 : 2;
+	new = (t_mall*)(stack[i]);
+	tmp = malloc(size);
+	while (new && tmp != new->ptr)
+		new = new->next;
 	tmp_mall->len = 0;
 	tmp_mall->use = 'n';
-	new_mall->ptr = ft_memcpy(new_mall->ptr, tmp_mall->ptr, tmp_mall->len);
-	return (new_mall->ptr);
+	new->ptr = ft_memcpy(new->ptr, tmp_mall->ptr, tmp_mall->len);
+	return (new->ptr);
 }
 
 void	*realloc(void *ptr, size_t size)
@@ -58,6 +55,5 @@ void	*realloc(void *ptr, size_t size)
 	if ((tmp_mall->len <= TINY && size > TINY && size <= SMALL) ||
 	(size > SMALL && tmp_mall->len <= SMALL))
 		return (new_mall(tmp_mall, size));
-		// printf("salut\n");
 	return (NULL);
 }

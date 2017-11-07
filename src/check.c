@@ -6,14 +6,14 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/01 17:57:59 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/02 18:47:12 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/06 18:11:47 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern size_t	page_tot[3];
-extern void		*stack[3];
+extern size_t	g_page_tot[3];
+extern void		*g_stack[3];
 
 int			check_large(void)
 {
@@ -25,7 +25,6 @@ int			check_large(void)
 	i = -1;
 	while (((len = ++i * sizeof(t_mall)) < page_tot[2] && tmp))
 		tmp = tmp->next;
-	printf("loop = %zu, page tot = %zu ", len, page_tot[2]);
 	if (len == page_tot[2])
 		return (0);
 	return (1);

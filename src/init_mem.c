@@ -6,15 +6,15 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:52:57 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/02 17:12:41 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/06 18:12:51 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern void	*stack[3];
+extern	void	*g_stack[3];
 
-int			init_both(size_t len, char type)
+int				init_both(size_t len, char type)
 {
 	t_mall	*tmp_mall;
 	void	*tmp;
@@ -30,7 +30,7 @@ int			init_both(size_t len, char type)
 	return (1);
 }
 
-void		init_large()
+void			init_large(void)
 {
 	t_mall	*large;
 
@@ -47,7 +47,6 @@ void			space(char type, size_t len)
 	t_mall	*new_mall;
 	void	*tmp;
 
-	// printf("type = %d, loop = %d\n", type, *loop);
 	tmp_mall = (t_mall*)(stack[type]);
 	while (tmp_mall->next)
 		tmp_mall = tmp_mall->next;
@@ -57,8 +56,6 @@ void			space(char type, size_t len)
 	new_mall->len = 0;
 	tmp_mall->next = new_mall;
 	new_mall->next = NULL;
-	// printf("loop = %d, tmp = %p\n", *loop, new_mall->next);
-	// printf("adr t_mall = %p, adr ptr = %p, loop = %d, type = %d\n", new_mall, tmp_mall->ptr, *loop, type);
 }
 
 int				init_mem(size_t malloc_size[2], size_t page_size)
@@ -73,12 +70,12 @@ int				init_mem(size_t malloc_size[2], size_t page_size)
 	while (++loop < (tiny + small))
 	{
 		if ((loop == 0 || loop == TINY) &&
-			!init_both((loop < tiny) ? malloc_size[0] : malloc_size[1],
-			(loop < tiny) ? 0 : 1))
-				return (0);
+		!init_both((loop < tiny) ? malloc_size[0] : malloc_size[1],
+		(loop < tiny) ? 0 : 1))
+			return (0);
 		else if (loop != 0 && loop != TINY)
 			space((loop < malloc_size[0] / TINY) ? 0 : 1,
-		 		(loop < tiny) ? TINY : SMALL);
+				(loop < tiny) ? TINY : SMALL);
 	}
 	init_large();
 	return (1);
