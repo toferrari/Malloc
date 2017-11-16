@@ -21,11 +21,11 @@ int			check_large(void)
 	size_t	i;
 	size_t	len;
 
-	tmp = (t_mall*)stack[2];
+	tmp = (t_mall*)g_stack[2];
 	i = -1;
-	while (((len = ++i * sizeof(t_mall)) < page_tot[2] && tmp))
+	while (((len = ++i * sizeof(t_mall)) < g_page_tot[2] && tmp))
 		tmp = tmp->next;
-	if (len == page_tot[2])
+	if (len == g_page_tot[2])
 		return (0);
 	return (1);
 }
@@ -35,11 +35,11 @@ int			check_place(size_t size)
 	t_mall *tmp;
 
 	if (size <= SMALL)
-		tmp = (t_mall*)stack[TAB(size)];
+		tmp = (t_mall*)g_stack[TAB(size)];
 	else if (size > SMALL && !check_large())
 		return (0);
 	else
-		tmp = (t_mall*)stack[2];
+		tmp = (t_mall*)g_stack[2];
 	while (tmp && tmp->use != 'n')
 		tmp = tmp->next;
 	if (size <= SMALL && !tmp)

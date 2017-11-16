@@ -21,8 +21,8 @@ int			first_mall(int type, size_t malloc_size)
 	void	*n_stack;
 	size_t	len;
 
-	tmp = (t_mall*)stack[type];
-	new = (t_mall*)stack[type];
+	tmp = (t_mall*)g_stack[type];
+	new = (t_mall*)g_stack[type];
 	while (tmp->next)
 		tmp = tmp->next;
 	len = (sizeof(t_mall) * malloc_size / (type == 0 ? TINY : SMALL));
@@ -46,8 +46,8 @@ int			new_large(size_t page_size)
 	t_mall	*new;
 	void	*n_stack;
 
-	tmp = (t_mall*)stack[2];
-	new = (t_mall*)stack[2];
+	tmp = (t_mall*)g_stack[2];
+	new = (t_mall*)g_stack[2];
 	while (tmp->next)
 		tmp = tmp->next;
 	if (!(n_stack = mmap(0, page_size, PROT_READ | PROT_WRITE,
@@ -59,7 +59,7 @@ int			new_large(size_t page_size)
 	new->use = 'n';
 	new->len = 0;
 	new->next = NULL;
-	page_tot[2] += page_size;
+	g_page_tot[2] += page_size;
 	return (1);
 }
 
@@ -71,7 +71,7 @@ int			new_page(size_t size, size_t malloc_size[2], size_t page_size)
 
 	type = (size > SMALL) ? 2 : 1;
 	type = (size <= TINY) ? 0 : 1;
-	tmp = (t_mall*)stack[type];
+	tmp = (t_mall*)g_stack[type];
 	if (type < 2 && !first_mall(type, malloc_size[type]))
 		return (0);
 	else if (!new_large(page_size))

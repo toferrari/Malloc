@@ -19,7 +19,7 @@ void		*large(size_t size)
 	t_mall	*large;
 	t_mall	*tmp_mall;
 
-	tmp_mall = (t_mall *)(stack[2]);
+	tmp_mall = (t_mall *)(g_stack[2]);
 	while (tmp_mall->next && tmp_mall->use != 'n')
 		tmp_mall = tmp_mall->next;
 	if (tmp_mall->use == 'n')
@@ -41,7 +41,7 @@ void		*allocate(size_t size)
 	t_mall	*tmp;
 	void	*ptr;
 
-	tmp = (t_mall *)stack[TAB(size)];
+	tmp = (t_mall *)g_stack[TAB(size)];
 	if (size <= SMALL)
 		while (tmp && (tmp->use != 'n'))
 			tmp = tmp->next;

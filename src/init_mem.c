@@ -22,7 +22,7 @@ int				init_both(size_t len, char type)
 	if (!(tmp = mmap(0, len, PROT_READ | PROT_WRITE,
 			MAP_ANON | MAP_PRIVATE, -1, 0)))
 		return (0);
-	tmp_mall = (t_mall*)(stack[type]);
+	tmp_mall = (t_mall*)(g_stack[type]);
 	tmp_mall->ptr = tmp;
 	tmp_mall->use = 'n';
 	tmp_mall->len = 0;
@@ -34,7 +34,7 @@ void			init_large(void)
 {
 	t_mall	*large;
 
-	large = (t_mall *)(stack[2]);
+	large = (t_mall *)(g_stack[2]);
 	large->ptr = NULL;
 	large->use = 'n';
 	large->len = 0;
@@ -47,7 +47,7 @@ void			space(char type, size_t len)
 	t_mall	*new_mall;
 	void	*tmp;
 
-	tmp_mall = (t_mall*)(stack[type]);
+	tmp_mall = (t_mall*)(g_stack[type]);
 	while (tmp_mall->next)
 		tmp_mall = tmp_mall->next;
 	new_mall = tmp_mall + 1;

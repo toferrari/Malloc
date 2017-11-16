@@ -28,7 +28,7 @@ void	*new_mall(t_mall *tmp_mall, size_t size)
 	void	*tmp;
 
 	i = (size <= SMALL) ? 1 : 2;
-	new = (t_mall*)(stack[i]);
+	new = (t_mall*)(g_stack[i]);
 	tmp = malloc(size);
 	while (new && tmp != new->ptr)
 		new = new->next;

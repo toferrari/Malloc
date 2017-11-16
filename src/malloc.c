@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:15:56 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/07 10:11:39 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/13 17:44:53 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void		*malloc(size_t size)
 
 	page_size = getpagesize();
 	get_size(page_size, size, &malloc_size);
-	if (!(*stack))
+	if (!(*g_stack))
 	{
 		if (!init_stack(page_size, malloc_size) ||
 		!init_mem(malloc_size, page_size))
@@ -48,21 +48,4 @@ void		*malloc(size_t size)
 	else if (!check_place(size) && !new_page(size, malloc_size, page_size))
 		return (NULL);
 	return (allocate(size));
-}
-
-int			main(void)
-{
-	char *str;
-	char *str1;
-	char *str2;
-	char *str3;
-	char *str4;
-
-	str = (char *)malloc(20);
-	str1 = (char *)malloc(200);
-	str2 = (char *)malloc(2000);
-	str3 = (char *)malloc(20);
-	str3 = realloc(str4, 2000);
-	show_alloc_mem();
-	return (0);
 }

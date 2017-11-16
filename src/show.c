@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 14:43:00 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/07 10:09:10 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/11/13 18:07:05 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,26 +24,33 @@ void	new_zone(int i, t_mall *tmp)
 		ft_printf("LARGE : %p\n", tmp);
 }
 
+void	print(t_mall *tmp)
+{
+	ft_printf("%p", tmp->ptr);
+	ft_printf(" - ");
+	ft_printf("%p", tmp->ptr + tmp->len);
+	ft_printf(" : ");
+	ft_printf("%zu", tmp->len);
+	ft_printf(" octets\n");
+}
+
 void	show_alloc_mem(void)
 {
 	t_mall	*tmp;
-	int		nb;
 	int		i;
 	size_t	tot;
 
-	nb = 0;
 	i = -1;
 	tot = 0;
 	while (++i < 3)
 	{
-		tmp = (t_mall *)stack[i];
+		tmp = (t_mall *)g_stack[i];
 		new_zone(i, tmp);
 		while (tmp)
 		{
 			if (tmp->use == 'y')
 			{
-				ft_printf("%p - %p : %zu octets\n", tmp->ptr, tmp->ptr + \
-				tmp->len, tmp->len);
+				print(tmp);
 				tot += tmp->len;
 			}
 			tmp = tmp->next;

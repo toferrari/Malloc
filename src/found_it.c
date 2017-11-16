@@ -22,7 +22,7 @@ t_mall	*found_it(void *ptr)
 		return (NULL);
 	while (++i < 3)
 	{
-		tmp_mall = (t_mall*)(stack[i]);
+		tmp_mall = (t_mall*)(g_stack[i]);
 		while (tmp_mall->next && ptr != tmp_mall->ptr)
 			tmp_mall = tmp_mall->next;
 		if (ptr == tmp_mall->ptr)
