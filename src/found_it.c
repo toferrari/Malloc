@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/26 15:01:56 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/06 16:32:01 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/12/18 17:34:24 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_mall	*found_it(void *ptr)
 	while (++i < 3)
 	{
 		tmp_mall = (t_mall*)(g_stack[i]);
+		if (ptr == tmp_mall->ptr)
+		ft_putendl("passeeeeeeeee");
 		while (tmp_mall->next && ptr != tmp_mall->ptr)
 			tmp_mall = tmp_mall->next;
 		if (ptr == tmp_mall->ptr)

@@ -6,12 +6,19 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:17:59 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/13 17:04:36 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/12/18 13:47:23 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
 # define MALLOC_H
+
+#ifdef DEBUG
+# undef DEBUG
+#endif
+# define DEBUG ft_putstr(__FILE__);ft_putchar(' ');ft_putnbr(__LINE__);ft_putchar('\n')
+# define LARGE ft_putchar(large->use);ft_putchar('\n')
+
 
 # include <stdio.h>
 # include <unistd.h>

@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 14:41:36 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/06 18:12:02 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/12/18 18:50:00 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,13 @@ void	*realloc(void *ptr, size_t size)
 	if (!ptr)
 		return (malloc(size));
 	tmp_mall = found_it(ptr);
+	ft_putstr("size = ");
+	ft_putnbr(size);
+	ft_putchar('\n');
+	ft_putstr("size ptr= ");
+	ft_putnbr(tmp_mall->len);
+	ft_putchar('\n');
+	ft_putendl("passe3");
 	if (!tmp_mall)
 		return (NULL);
 	if ((size <= TINY && tmp_mall->len <= TINY) ||

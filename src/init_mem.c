@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/06 16:52:57 by tferrari          #+#    #+#             */
-/*   Updated: 2017/11/06 18:12:51 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/12/18 17:08:04 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,13 @@ int				init_both(size_t len, char type)
 	t_mall	*tmp_mall;
 	void	*tmp;
 
-	if (!(tmp = mmap(0, len, PROT_READ | PROT_WRITE,
-			MAP_ANON | MAP_PRIVATE, -1, 0)))
+	DEBUG;
+	fflush(stdout);
+	if ((tmp = mmap(0, len, PROT_READ | PROT_WRITE,
+			MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
 		return (0);
+		DEBUG;
+		fflush(stdout);
 	tmp_mall = (t_mall*)(g_stack[type]);
 	tmp_mall->ptr = tmp;
 	tmp_mall->use = 'n';
@@ -50,6 +54,7 @@ void			space(char type, size_t len)
 	tmp_mall = (t_mall*)(g_stack[type]);
 	while (tmp_mall->next)
 		tmp_mall = tmp_mall->next;
+	// ft_putendl(tmp_mall);
 	new_mall = tmp_mall + 1;
 	new_mall->ptr = tmp_mall->ptr + len;
 	new_mall->use = 'n';
