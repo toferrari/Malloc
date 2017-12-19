@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:15:56 by tferrari          #+#    #+#             */
-/*   Updated: 2017/12/18 18:47:34 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/12/19 13:37:40 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ void		*malloc(size_t size)
 {
 	size_t	page_size;
 	size_t	malloc_size[2];
-	ft_putnbr(size);
-	ft_putchar('\n');
-	// ft_putnbr(size);
-	// ft_putendl("");
+
 	page_size = getpagesize();
 	get_size(page_size, size, &malloc_size);
 	if (!(*g_stack))

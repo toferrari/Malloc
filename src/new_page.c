@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/02 13:53:59 by tferrari          #+#    #+#             */
-/*   Updated: 2017/12/18 18:39:00 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/12/19 13:12:05 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,11 @@ int			first_mall(int type, size_t malloc_size)
 	while (tmp->next)
 		tmp = tmp->next;
 	len = (sizeof(t_mall) * malloc_size / (type == 0 ? TINY : SMALL));
-	DEBUG;
-	fflush(stdout);
 	if ((n_stack = mmap(0, len, PROT_READ | PROT_WRITE,
 		MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
 		return (0);
 	tmp->next = n_stack;
 	new = (t_mall*)n_stack;
-	DEBUG;
-	fflush(stdout);
 	if ((new->ptr = mmap(0, len, PROT_READ | PROT_WRITE,
 			MAP_ANON | MAP_PRIVATE, -1, 0)) == MAP_FAILED)
 		return (0);
@@ -64,8 +60,6 @@ int			new_large(size_t page_size)
 	new->len = 0;
 	new->next = NULL;
 	g_page_tot[2] += page_size;
-	DEBUG;
-	fflush(stdout);
 	return (1);
 }
 

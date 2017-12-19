@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/01 17:57:59 by tferrari          #+#    #+#             */
-/*   Updated: 2017/12/18 18:34:28 by tferrari         ###   ########.fr       */
+/*   Updated: 2017/12/19 13:35:07 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int			check_large(void)
 
 	tmp = (t_mall*)g_stack[2];
 	i = -1;
-	while (((len = ++i * sizeof(t_mall)) < g_page_tot[2] && tmp && tmp->use == 'y'))
+	while (((len = ++i * sizeof(t_mall)) < g_page_tot[2] &&
+			tmp && tmp->use == 'y'))
 		tmp = tmp->next;
 	if (len == g_page_tot[2])
 		return (0);
