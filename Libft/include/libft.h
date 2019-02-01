@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/02 19:37:12 by tferrari          #+#    #+#             */
-/*   Updated: 2017/03/22 13:47:48 by tferrari         ###   ########.fr       */
+/*   Updated: 2019/01/30 19:56:16 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void			ft_putchar(char c);
 void			ft_putstr(const char *s);
 void			ft_putendl(char const *s);
 void			ft_putnbr(int c);
+void			ft_putnbr_base(long long c, int base);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putstr_fd(const char *s, int fd);
 void			ft_putendl_fd(char const *s, int fd);

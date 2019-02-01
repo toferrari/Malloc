@@ -6,7 +6,7 @@
 /*   By: tferrari <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/02 19:37:12 by tferrari          #+#    #+#             */
-/*   Updated: 2016/11/02 19:37:22 by tferrari         ###   ########.fr       */
+/*   Updated: 2019/01/30 14:31:41 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,5 +15,5 @@
 void	ft_putendl_fd(const char *s, int fd)
 {
 	ft_putstr_fd((char *)s, fd);
-	ft_putchar_fd('\n', fd);
+	write(fd, "\n", 1);
 }

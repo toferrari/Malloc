@@ -6,14 +6,13 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/05 14:41:36 by tferrari          #+#    #+#             */
-/*   Updated: 2017/12/19 13:35:50 by tferrari         ###   ########.fr       */
+/*   Updated: 2019/01/30 19:01:37 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-extern size_t	g_page_tot[3];
-extern void		*g_stack[3];
+extern t_memory		g_mem;
 
 void	*realloc_bigger(t_mall *tmp_mall, size_t size)
 {
@@ -25,12 +24,16 @@ void	*realloc_bigger(t_mall *tmp_mall, size_t size)
 	new = ft_memcpy(new, tmp_mall->ptr, tmp_mall->len);
 	tmp_mall->ptr = new;
 	tmp_mall->len = size;
+	pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_destroy(&g_mutex);
 	return (tmp_mall->ptr);
 }
 
 void	*same_zone(t_mall *tmp_mall, size_t size)
 {
 	tmp_mall->len = size;
+	pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_destroy(&g_mutex);
 	return (tmp_mall->ptr);
 }
 
@@ -41,13 +44,15 @@ void	*new_mall(t_mall *tmp_mall, size_t size)
 	void	*tmp;
 
 	i = (size <= SMALL) ? 1 : 2;
-	new = (t_mall*)(g_stack[i]);
+	new = (t_mall*)(g_mem.stack[i]);
 	tmp = malloc(size);
 	while (new && tmp != new->ptr)
 		new = new->next;
 	tmp_mall->len = 0;
 	tmp_mall->use = 'n';
 	new->ptr = ft_memcpy(new->ptr, tmp_mall->ptr, tmp_mall->len);
+	pthread_mutex_unlock(&g_mutex);
+	pthread_mutex_destroy(&g_mutex);
 	return (new->ptr);
 }
 
@@ -55,6 +60,8 @@ void	*realloc(void *ptr, size_t size)
 {
 	t_mall			*tmp_mall;
 
+	pthread_mutex_init(&g_mutex, NULL);
+	pthread_mutex_lock(&g_mutex);
 	if (!ptr)
 		return (malloc(size));
 	tmp_mall = found_it(ptr);
