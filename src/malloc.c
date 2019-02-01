@@ -6,7 +6,7 @@
 /*   By: tferrari <tferrari@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/09/14 14:15:56 by tferrari          #+#    #+#             */
-/*   Updated: 2019/01/31 14:45:43 by tferrari         ###   ########.fr       */
+/*   Updated: 2019/02/01 13:00:29 by tferrari         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ void		*malloc(size_t size)
 	pthread_mutex_lock(&g_mutex);
 	page_size = getpagesize();
 	get_size(page_size, &malloc_size);
-	ft_putnbr(malloc_size[1] / SMALL);
-	ft_putchar('\n');
 	if (g_mem.stack[0] == NULL)
 	{
 		if (!init_stack(page_size, malloc_size) ||
